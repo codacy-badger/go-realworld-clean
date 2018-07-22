@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	
 	"github.com/err0r500/go-realworld-clean/implem/gin.server"
+	"github.com/err0r500/go-realworld-clean/implem/jwt.authHandler"
+"github.com/err0r500/go-realworld-clean/implem/logrus.logger"
 	"github.com/err0r500/go-realworld-clean/infra"
 	"github.com/err0r500/go-realworld-clean/uc"
 )
@@ -41,6 +41,7 @@ func main() {
 
 	infra.LoggerConfig(rootCmd)
 	infra.ServerConfig(rootCmd)
+	infra.DatabaseConfig(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		logrus.WithError(err).Fatal()
@@ -53,10 +54,20 @@ func run() {
 		infra.DebugMode,
 	)
 
-	rH := server.NewRouter(
-		uc.NewInteractor(),
-	)
-	rH.SetRoutes(ginServer.Router)
+	authHandler := jwt.NewTokenHandler(viper.GetString("jwt.Salt"))
+	
+	server.NewRouter(
+		uc.NewHandler(
+			logger.NewLogger("TEST",
+				viper.GetString("log.level"),
+				viper.GetString("log.format"),
+			),
+			nil, //fixme : not implemented yet
+			nil, //fixme : not implemented yet
+			authHandler,
+		),
+		authHandler,
+	).SetRoutes(ginServer.Router)
 
 	ginServer.Start()
 }
