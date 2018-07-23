@@ -22,6 +22,14 @@ func NewRouter(i uc.Handler, auth uc.AuthHandler) RouterHandler {
 	}
 }
 
+func NewWithLogger(i uc.Handler, auth uc.AuthHandler, logger uc.Logger) RouterHandler {
+	return RouterHandler{
+		ucHandler:   i,
+		authHandler: auth,
+		Logger:      logger,
+	}
+}
+
 func (rH RouterHandler) SetRoutes(r *gin.Engine) {
 	api := r.Group("/api")
 
@@ -31,13 +39,13 @@ func (rH RouterHandler) SetRoutes(r *gin.Engine) {
 	profiles.DELETE("/:username/follow", rH.jwtMiddleware(), rH.profileFollowDelete) // Unfollow a user by username
 
 	users := api.Group("/users")
-	users.POST("/", rH.userPost)           // Register a new user
+	users.POST("", rH.userPost)            // Register a new user
 	users.POST("/login", rH.userLoginPost) // Login for existing user
 
-	user := api.Group("/user")
-	user.GET("/", rH.jwtMiddleware(), rH.userGet)     // Gets the currently logged-in user
-	user.PUT("/", rH.jwtMiddleware(), rH.userPatch)   // WARNING : it's a in fact a PATCH request in the API contract !!!
-	user.PATCH("/", rH.jwtMiddleware(), rH.userPatch) // just in case it's fixed one day....
+	user := api.Group("/users")
+	user.GET("", rH.jwtMiddleware(), rH.userGet)     // Gets the currently logged-in user
+	user.PUT("", rH.jwtMiddleware(), rH.userPatch)   // WARNING : it's a in fact a PATCH request in the API contract !!!
+	user.PATCH("", rH.jwtMiddleware(), rH.userPatch) // just in case it's fixed one day....
 
 	/*
 		articles.POST("/", articlesPost)

@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/err0r500/go-cleanarch-skeleton/domain"
+	"github.com/err0r500/go-realworld-clean/uc"
 	"github.com/sirupsen/logrus"
 )
 
@@ -16,7 +17,7 @@ type CredentialsGetter interface {
 	GetCredentials() string
 }
 
-func NewLogger(env, logLevel, logFormat string) *LogrusLogger {
+func NewLogger(env, logLevel, logFormat string) uc.Logger {
 	logger := logrus.New()
 	l, err := logrus.ParseLevel(logLevel)
 	if err != nil {

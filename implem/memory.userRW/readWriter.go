@@ -10,6 +10,7 @@ import (
 
 type rw struct {
 	store *sync.Map // map username:user
+	//TODO : ADD a password hasher here
 }
 
 func New() uc.UserRW {

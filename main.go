@@ -7,6 +7,7 @@ import (
 	"github.com/err0r500/go-realworld-clean/implem/jwt.authHandler"
 	"github.com/err0r500/go-realworld-clean/implem/logrus.logger"
 	"github.com/err0r500/go-realworld-clean/implem/memory.userRW"
+	"github.com/err0r500/go-realworld-clean/implem/user.validator"
 	"github.com/err0r500/go-realworld-clean/infra"
 	"github.com/err0r500/go-realworld-clean/uc"
 	"github.com/sirupsen/logrus"
@@ -57,18 +58,20 @@ func run() {
 	)
 
 	authHandler := jwt.NewTokenHandler(viper.GetString("jwt.Salt"))
+	routerLogger := logger.NewLogger("TEST",
+		viper.GetString("log.level"),
+		viper.GetString("log.format"),
+	)
 
-	server.NewRouter(
+	server.NewWithLogger(
 		uc.NewHandler(
-			logger.NewLogger("TEST",
-				viper.GetString("log.level"),
-				viper.GetString("log.format"),
-			),
+			routerLogger,
 			userRW.New(),
-			nil, //fixme : not implemented yet
+			validator.New(),
 			authHandler,
 		),
 		authHandler,
+		routerLogger,
 	).SetRoutes(ginServer.Router)
 
 	ginServer.Start()

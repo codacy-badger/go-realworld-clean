@@ -3,11 +3,14 @@ package server
 import (
 	"net/http"
 
-	formatter "github.com/err0r500/go-realworld-clean/implem/json.formatter"
+	"log"
+
+	"github.com/err0r500/go-realworld-clean/implem/json.formatter"
 	"github.com/gin-gonic/gin"
 )
 
 func (rH RouterHandler) userGet(c *gin.Context) {
+	log.Println("userGet")
 	log := rH.log(c.Request.URL.Path)
 
 	userID, err := rH.getUserName(c)

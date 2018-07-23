@@ -15,7 +15,7 @@ import (
 	"gopkg.in/h2non/baloo.v3"
 )
 
-var userGetPath = "/api/user"
+var userGetPath = "/api/users"
 
 func TestUserGet_happyCase(t *testing.T) {
 	mockCtrl := gomock.NewController(t)

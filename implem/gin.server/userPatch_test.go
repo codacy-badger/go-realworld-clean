@@ -16,7 +16,7 @@ import (
 	"gopkg.in/h2non/baloo.v3"
 )
 
-var userPutPath = "/api/user/"
+var userPutPath = "/api/users"
 
 func TestUserPut_happyCase(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
@@ -45,8 +45,8 @@ func TestUserPut_happyCase(t *testing.T) {
 		AddHeader("Authorization", token).
 		BodyString(`{
   			"user": {
-				"email": "` + testData.User("rick").Email + `",
-				"username": "` + testData.User("rick").Name + `"
+				"bio": "` + testData.User("rick").Email + `",
+				"name": "` + testData.User("rick").Name + `"
   			}
 		}`).
 		Expect(t).
