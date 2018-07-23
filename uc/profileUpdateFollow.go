@@ -11,7 +11,7 @@ func (i interactor) ProfileUpdateFollow(userName, followeeName string, follow bo
 		return nil, errWrongUser
 	}
 	if user == nil {
-		return nil, errUserNotFound
+		return nil, ErrUserNotFound
 	}
 
 	user.UpdateFollowees(followeeName, follow)

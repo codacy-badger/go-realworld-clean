@@ -2,14 +2,16 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/err0r500/go-realworld-clean/implem/gin.server"
+	"github.com/err0r500/go-realworld-clean/implem/jwt.authHandler"
+	"github.com/err0r500/go-realworld-clean/implem/logrus.logger"
+	"github.com/err0r500/go-realworld-clean/implem/memory.userRW"
+	"github.com/err0r500/go-realworld-clean/infra"
+	"github.com/err0r500/go-realworld-clean/uc"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/err0r500/go-realworld-clean/implem/gin.server"
-	"github.com/err0r500/go-realworld-clean/implem/jwt.authHandler"
-"github.com/err0r500/go-realworld-clean/implem/logrus.logger"
-	"github.com/err0r500/go-realworld-clean/infra"
-	"github.com/err0r500/go-realworld-clean/uc"
 )
 
 // Build number and versions injected at compile time, set yours
@@ -55,14 +57,14 @@ func run() {
 	)
 
 	authHandler := jwt.NewTokenHandler(viper.GetString("jwt.Salt"))
-	
+
 	server.NewRouter(
 		uc.NewHandler(
 			logger.NewLogger("TEST",
 				viper.GetString("log.level"),
 				viper.GetString("log.format"),
 			),
-			nil, //fixme : not implemented yet
+			userRW.New(),
 			nil, //fixme : not implemented yet
 			authHandler,
 		),

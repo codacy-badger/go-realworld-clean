@@ -13,6 +13,7 @@ const (
 	ImageLink
 	Password
 )
+
 //UserEdit(userID string, newUser map[UpdatableProperty]*string) (user *domain.User, err error)
 func (i interactor) UserEdit(userName string, fieldsToUpdate map[UpdatableProperty]*string) (*domain.User, error) {
 	user, err := i.userRW.GetByName(userName)
@@ -23,7 +24,7 @@ func (i interactor) UserEdit(userName string, fieldsToUpdate map[UpdatableProper
 		return nil, errWrongUser
 	}
 	if user == nil {
-		return nil, errUserNotFound
+		return nil, ErrUserNotFound
 	}
 
 	domain.UpdateUser(user,
