@@ -44,14 +44,14 @@ func (rH RouterHandler) userPatch(c *gin.Context) {
 	})
 	if err != nil {
 		log(err)
-		c.Status(http.StatusInternalServerError)
+		c.Status(http.StatusUnprocessableEntity)
 		return
 	}
 
 	token, err := rH.authHandler.GenUserToken(user.Name)
 	if err != nil {
 		log("failed to generate token for", user.Name)
-		c.Status(http.StatusInternalServerError)
+		c.Status(http.StatusUnprocessableEntity)
 		return
 	}
 
