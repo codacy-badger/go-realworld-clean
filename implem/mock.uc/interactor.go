@@ -5,8 +5,8 @@
 package uc
 
 import (
-	uc "github.com/err0r500/go-realworld-clean/uc"
 	domain "github.com/err0r500/go-realworld-clean/domain"
+	uc "github.com/err0r500/go-realworld-clean/uc"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -113,6 +113,19 @@ func (m *MockHandler) UserEdit(userID string, newUser map[uc.UpdatableProperty]*
 // UserEdit indicates an expected call of UserEdit
 func (mr *MockHandlerMockRecorder) UserEdit(userID, newUser interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserEdit", reflect.TypeOf((*MockHandler)(nil).UserEdit), userID, newUser)
+}
+
+// ArticlesFeed mocks base method
+func (m *MockHandler) ArticlesFeed(username string, limit, offset int) ([]domain.Article, error) {
+	ret := m.ctrl.Call(m, "ArticlesFeed", username, limit, offset)
+	ret0, _ := ret[0].([]domain.Article)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ArticlesFeed indicates an expected call of ArticlesFeed
+func (mr *MockHandlerMockRecorder) ArticlesFeed(username, limit, offset interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArticlesFeed", reflect.TypeOf((*MockHandler)(nil).ArticlesFeed), username, limit, offset)
 }
 
 // MockLogger is a mock of Logger interface
@@ -273,6 +286,42 @@ func (m *MockUserRW) Save(user domain.User) error {
 // Save indicates an expected call of Save
 func (mr *MockUserRWMockRecorder) Save(user interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockUserRW)(nil).Save), user)
+}
+
+// MockArticleRW is a mock of ArticleRW interface
+type MockArticleRW struct {
+	ctrl     *gomock.Controller
+	recorder *MockArticleRWMockRecorder
+}
+
+// MockArticleRWMockRecorder is the mock recorder for MockArticleRW
+type MockArticleRWMockRecorder struct {
+	mock *MockArticleRW
+}
+
+// NewMockArticleRW creates a new mock instance
+func NewMockArticleRW(ctrl *gomock.Controller) *MockArticleRW {
+	mock := &MockArticleRW{ctrl: ctrl}
+	mock.recorder = &MockArticleRWMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockArticleRW) EXPECT() *MockArticleRWMockRecorder {
+	return m.recorder
+}
+
+// GetByAuthorsNameOrderedByMostRecentAsc mocks base method
+func (m *MockArticleRW) GetByAuthorsNameOrderedByMostRecentAsc(usernames []string) ([]domain.Article, error) {
+	ret := m.ctrl.Call(m, "GetByAuthorsNameOrderedByMostRecentAsc", usernames)
+	ret0, _ := ret[0].([]domain.Article)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByAuthorsNameOrderedByMostRecentAsc indicates an expected call of GetByAuthorsNameOrderedByMostRecentAsc
+func (mr *MockArticleRWMockRecorder) GetByAuthorsNameOrderedByMostRecentAsc(usernames interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByAuthorsNameOrderedByMostRecentAsc", reflect.TypeOf((*MockArticleRW)(nil).GetByAuthorsNameOrderedByMostRecentAsc), usernames)
 }
 
 // MockUserValidator is a mock of UserValidator interface

@@ -67,6 +67,7 @@ func run() {
 		uc.NewHandler(
 			routerLogger,
 			userRW.New(),
+			nil,
 			validator.New(),
 			authHandler,
 		),

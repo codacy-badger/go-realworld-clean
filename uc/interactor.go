@@ -12,13 +12,16 @@ type Handler interface {
 	UserLogin(email, password string) (user *domain.User, token string, err error)
 	UserGet(userID string) (user *domain.User, token string, err error)
 	UserEdit(userID string, newUser map[UpdatableProperty]*string) (user *domain.User, err error)
+
+	ArticlesFeed(username string, limit, offset int) ([]domain.Article, error)
 }
 
 // NewHandler : the interactor constructor, use this in order to avoid null pointers at runtime
-func NewHandler(logger Logger, uRW UserRW, validator UserValidator, handler AuthHandler) Handler {
+func NewHandler(logger Logger, uRW UserRW, arw ArticleRW, validator UserValidator, handler AuthHandler) Handler {
 	return interactor{
 		logger:        logger,
 		userRW:        uRW,
+		articleRW:     arw,
 		userValidator: validator,
 		authHandler:   handler,
 	}
@@ -29,6 +32,7 @@ func NewHandler(logger Logger, uRW UserRW, validator UserValidator, handler Auth
 type interactor struct {
 	logger        Logger
 	userRW        UserRW
+	articleRW     ArticleRW
 	userValidator UserValidator
 	authHandler   AuthHandler
 }
@@ -48,6 +52,10 @@ type UserRW interface {
 	GetByName(userName string) (*domain.User, error)
 	GetByEmailAndPassword(email, password string) (*domain.User, error)
 	Save(user domain.User) error
+}
+
+type ArticleRW interface {
+	GetByAuthorsNameOrderedByMostRecentAsc(usernames []string) ([]domain.Article, error)
 }
 
 type UserValidator interface {

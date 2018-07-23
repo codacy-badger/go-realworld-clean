@@ -11,6 +11,7 @@ import (
 type MockedInteractor struct {
 	Logger        uc.Logger
 	UserRW        *MockUserRW
+	ArticleRW     *MockArticleRW
 	UserValidator *MockUserValidator
 	AuthHandler   *MockAuthHandler
 }
@@ -26,6 +27,7 @@ func NewMockedInteractor(mockCtrl *gomock.Controller) MockedInteractor {
 	return MockedInteractor{
 		Logger:        simpleLogger{},
 		UserRW:        NewMockUserRW(mockCtrl),
+		ArticleRW:     NewMockArticleRW(mockCtrl),
 		UserValidator: NewMockUserValidator(mockCtrl),
 		AuthHandler:   NewMockAuthHandler(mockCtrl),
 	}
@@ -33,5 +35,5 @@ func NewMockedInteractor(mockCtrl *gomock.Controller) MockedInteractor {
 
 //GetUCHandler : returns a uc.interactor in order to call its methods aka the use cases to test
 func (i MockedInteractor) GetUCHandler() uc.Handler {
-	return uc.NewHandler(i.Logger, i.UserRW, i.UserValidator, i.AuthHandler)
+	return uc.NewHandler(i.Logger, i.UserRW, i.ArticleRW, i.UserValidator, i.AuthHandler)
 }
