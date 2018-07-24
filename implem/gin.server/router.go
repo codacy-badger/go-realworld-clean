@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"errors"
@@ -42,29 +43,48 @@ func (rH RouterHandler) SetRoutes(r *gin.Engine) {
 	users.POST("", rH.userPost)            // Register a new user
 	users.POST("/login", rH.userLoginPost) // Login for existing user
 
-	user := api.Group("/users")
-	user.GET("", rH.jwtMiddleware(), rH.userGet)     // Gets the currently logged-in user
-	user.PUT("", rH.jwtMiddleware(), rH.userPatch)   // WARNING : it's a in fact a PATCH request in the API contract !!!
-	user.PATCH("", rH.jwtMiddleware(), rH.userPatch) // just in case it's fixed one day....
+	users.GET("", rH.jwtMiddleware(), rH.userGet)     // Gets the currently logged-in user
+	users.PUT("", rH.jwtMiddleware(), rH.userPatch)   // WARNING : it's a in fact a PATCH request in the API contract !!!
+	users.PATCH("", rH.jwtMiddleware(), rH.userPatch) // just in case it's fixed one day....
 
-	/*
-		articles.POST("/", articlesPost)
-		articles.PUT("/:slug", articlesPut)
-		articles.DELETE("/:slug", articlesDelete)
+	articles := api.Group("/articles")
+	// GET articleCollection
+	articles.GET("", rH.articlesFilteredGet)
+	api.GET("articlesFeed", rH.jwtMiddleware(), rH.articlesFeedGet) //unused, see GET /:slug below
+	articles.POST("", rH.jwtMiddleware(), rH.articlePost)
+	articles.GET("/:slug", func(c *gin.Context) { // ugly api contract !
+		if c.Param("slug") == "feed" {
+			rH.jwtMiddleware()(c)
+			rH.articlesFeedGet(c)
+			return
+		}
 
-		articles.POST("/:slug/favorite", articlesFavoritePost)
-		articles.DELETE("/:slug/favorite", articlesFavoriteDelete)
+		rH.articleGet(c)
+	})
+	articles.PUT("/:slug", rH.jwtMiddleware(), rH.articlePut)
+	articles.DELETE("/:slug", rH.jwtMiddleware(), rH.articleDelete)
+	articles.POST("/:slug/favorite", rH.jwtMiddleware(), rH.articleFavoritePost)
+	articles.DELETE("/:slug/favorite", rH.jwtMiddleware(), rH.articleFavoriteDelete)
+	////article comments
+	articles.GET("/:slug/comments", rH.articleCommentsGet)
+	articles.POST("/:slug/comments", rH.jwtMiddleware(), rH.articleCommentPost)
+	articles.DELETE("/:slug/comments/:id", rH.jwtMiddleware(), rH.articleCommentDelete)
 
-		articles.POST("/:slug/comments", articlesCommentPost)
-		articles.DELETE("/:slug/comments/:id", articlesCommentDelete)
-
-		articlesAnonymous.GET("/", articlesAnonymousGet)
-		articlesAnonymous.GET("/:slug", articleAnonymousGet)
-		articlesAnonymous.GET("/:slug/comments", articleCommentsGet)
-
-		tags.GET("/", TagList)
-	*/
+	//tags
+	api.GET("/tags", rH.tagsGet)
 }
+
+// TODO : implement these routes
+func (RouterHandler) articlePost(c *gin.Context)           {}
+func (RouterHandler) articleGet(c *gin.Context)            {}
+func (RouterHandler) articlePut(c *gin.Context)            {}
+func (RouterHandler) articleDelete(c *gin.Context)         {}
+func (RouterHandler) articleFavoritePost(c *gin.Context)   {}
+func (RouterHandler) articleFavoriteDelete(c *gin.Context) {}
+func (RouterHandler) articleCommentsGet(c *gin.Context)    {}
+func (RouterHandler) articleCommentPost(c *gin.Context)    {}
+func (RouterHandler) articleCommentDelete(c *gin.Context)  {}
+func (RouterHandler) tagsGet(c *gin.Context)               {}
 
 const userNameKey = "userNameKey"
 
@@ -97,4 +117,8 @@ func (rH RouterHandler) log(title string) func(...interface{}) {
 	return func(logs ...interface{}) {
 		rH.Logger.Log(title, logs)
 	}
+}
+
+func (RouterHandler) MethodAndPath(c *gin.Context) string {
+	return fmt.Sprintf("%s %s", c.Request.Method, c.Request.URL.Path)
 }

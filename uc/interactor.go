@@ -14,6 +14,7 @@ type Handler interface {
 	UserEdit(userID string, newUser map[UpdatableProperty]*string) (user *domain.User, err error)
 
 	ArticlesFeed(username string, limit, offset int) (articles domain.ArticleCollection, totalArticleCount int, err error)
+	GetArticles(limit, offset int, filters Filters) (articles domain.ArticleCollection, totalArticleCount int, err error)
 }
 
 // NewHandler : the interactor constructor, use this in order to avoid null pointers at runtime

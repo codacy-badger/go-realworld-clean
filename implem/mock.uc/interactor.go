@@ -129,6 +129,20 @@ func (mr *MockHandlerMockRecorder) ArticlesFeed(username, limit, offset interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArticlesFeed", reflect.TypeOf((*MockHandler)(nil).ArticlesFeed), username, limit, offset)
 }
 
+// GetArticles mocks base method
+func (m *MockHandler) GetArticles(limit, offset int, filters uc.Filters) (domain.ArticleCollection, int, error) {
+	ret := m.ctrl.Call(m, "GetArticles", limit, offset, filters)
+	ret0, _ := ret[0].(domain.ArticleCollection)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// GetArticles indicates an expected call of GetArticles
+func (mr *MockHandlerMockRecorder) GetArticles(limit, offset, filters interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticles", reflect.TypeOf((*MockHandler)(nil).GetArticles), limit, offset, filters)
+}
+
 // MockLogger is a mock of Logger interface
 type MockLogger struct {
 	ctrl     *gomock.Controller
