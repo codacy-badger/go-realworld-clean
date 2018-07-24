@@ -13,7 +13,7 @@ type Handler interface {
 	UserGet(userID string) (user *domain.User, token string, err error)
 	UserEdit(userID string, newUser map[UpdatableProperty]*string) (user *domain.User, err error)
 
-	ArticlesFeed(username string, limit, offset int) ([]domain.Article, error)
+	ArticlesFeed(username string, limit, offset int) (articles domain.ArticleCollection, totalArticleCount int, err error)
 }
 
 // NewHandler : the interactor constructor, use this in order to avoid null pointers at runtime
@@ -56,6 +56,7 @@ type UserRW interface {
 
 type ArticleRW interface {
 	GetByAuthorsNameOrderedByMostRecentAsc(usernames []string) ([]domain.Article, error)
+	GetRecentFiltered(filters Filters) ([]domain.Article, error)
 }
 
 type UserValidator interface {

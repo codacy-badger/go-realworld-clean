@@ -116,11 +116,12 @@ func (mr *MockHandlerMockRecorder) UserEdit(userID, newUser interface{}) *gomock
 }
 
 // ArticlesFeed mocks base method
-func (m *MockHandler) ArticlesFeed(username string, limit, offset int) ([]domain.Article, error) {
+func (m *MockHandler) ArticlesFeed(username string, limit, offset int) (domain.ArticleCollection, int, error) {
 	ret := m.ctrl.Call(m, "ArticlesFeed", username, limit, offset)
-	ret0, _ := ret[0].([]domain.Article)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(domain.ArticleCollection)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
 // ArticlesFeed indicates an expected call of ArticlesFeed
@@ -322,6 +323,19 @@ func (m *MockArticleRW) GetByAuthorsNameOrderedByMostRecentAsc(usernames []strin
 // GetByAuthorsNameOrderedByMostRecentAsc indicates an expected call of GetByAuthorsNameOrderedByMostRecentAsc
 func (mr *MockArticleRWMockRecorder) GetByAuthorsNameOrderedByMostRecentAsc(usernames interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByAuthorsNameOrderedByMostRecentAsc", reflect.TypeOf((*MockArticleRW)(nil).GetByAuthorsNameOrderedByMostRecentAsc), usernames)
+}
+
+// GetRecentFiltered mocks base method
+func (m *MockArticleRW) GetRecentFiltered(filters uc.Filters) ([]domain.Article, error) {
+	ret := m.ctrl.Call(m, "GetRecentFiltered", filters)
+	ret0, _ := ret[0].([]domain.Article)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRecentFiltered indicates an expected call of GetRecentFiltered
+func (mr *MockArticleRWMockRecorder) GetRecentFiltered(filters interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecentFiltered", reflect.TypeOf((*MockArticleRW)(nil).GetRecentFiltered), filters)
 }
 
 // MockUserValidator is a mock of UserValidator interface

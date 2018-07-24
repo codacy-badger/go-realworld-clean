@@ -1,6 +1,8 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
 type Article struct {
 	Slug           string    `json:"slug"`
@@ -22,4 +24,29 @@ type Comment struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	Body      string    `json:"body"`
 	Author    User      `json:"author"`
+}
+
+type ArticleCollection []Article
+
+func (articles ArticleCollection) ApplyLimitAndOffset(limit, offset int) ArticleCollection {
+	if limit <= 0 {
+		return []Article{}
+	}
+
+	articlesSize := len(articles)
+	min := offset
+	if min < 0 {
+		min = 0
+	}
+
+	if min > articlesSize {
+		return []Article{}
+	}
+
+	max := min + limit
+	if max > articlesSize {
+		max = articlesSize
+	}
+
+	return articles[min:max]
 }

@@ -4,34 +4,19 @@ import (
 	"github.com/err0r500/go-realworld-clean/domain"
 )
 
-func (i interactor) ArticlesFeed(username string, limit, offset int) ([]domain.Article, error) {
+func (i interactor) ArticlesFeed(username string, limit, offset int) (domain.ArticleCollection, int, error) {
 	if limit < 0 {
-		return []domain.Article{}, nil
+		return domain.ArticleCollection{}, 0, nil
 	}
 
 	user, err := i.userRW.GetByName(username)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	articles, err := i.articleRW.GetByAuthorsNameOrderedByMostRecentAsc(user.FollowIDs)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	articlesSize := len(articles)
-	min := offset
-	if min < 0 {
-		min = 0
-	}
-
-	if min > articlesSize {
-		return []domain.Article{}, nil
-	}
-
-	max := min + limit
-	if max > articlesSize {
-		max = articlesSize
-	}
-
-	return articles[min:max], nil
+	return domain.ArticleCollection(articles).ApplyLimitAndOffset(limit, offset), len(articles), nil
 }
