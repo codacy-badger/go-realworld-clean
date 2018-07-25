@@ -1,7 +1,10 @@
 # go-realworld-clean
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/err0r500/go-realworld-clean/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/err0r500/go-realworld-clean.svg?branch=master)](https://travis-ci.org/err0r500/go-realworld-clean)
+[![BCH compliance](https://bettercodehub.com/edge/badge/err0r500/go-realworld-clean?branch=master)](https://bettercodehub.com/)
+[![codecov](https://codecov.io/gh/err0r500/go-realworld-clean/branch/master/graph/badge.svg)](https://codecov.io/gh/err0r500/go-realworld-clean)
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/err0r500/go-realworld-clean/blob/master/LICENSE)
 ## Install and Hooks
 
 Make sure you installed [dep](https://github.com/golang/dep) and 
