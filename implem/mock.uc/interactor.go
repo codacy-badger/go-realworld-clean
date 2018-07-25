@@ -143,6 +143,57 @@ func (mr *MockHandlerMockRecorder) GetArticles(limit, offset, filters interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticles", reflect.TypeOf((*MockHandler)(nil).GetArticles), limit, offset, filters)
 }
 
+// ArticlePost mocks base method
+func (m *MockHandler) ArticlePost(article domain.Article) (*domain.Article, error) {
+	ret := m.ctrl.Call(m, "ArticlePost", article)
+	ret0, _ := ret[0].(*domain.Article)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ArticlePost indicates an expected call of ArticlePost
+func (mr *MockHandlerMockRecorder) ArticlePost(article interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArticlePost", reflect.TypeOf((*MockHandler)(nil).ArticlePost), article)
+}
+
+// ArticlePut mocks base method
+func (m *MockHandler) ArticlePut(slug string, article domain.Article) (*domain.Article, error) {
+	ret := m.ctrl.Call(m, "ArticlePut", slug, article)
+	ret0, _ := ret[0].(*domain.Article)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ArticlePut indicates an expected call of ArticlePut
+func (mr *MockHandlerMockRecorder) ArticlePut(slug, article interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArticlePut", reflect.TypeOf((*MockHandler)(nil).ArticlePut), slug, article)
+}
+
+// ArticleGet mocks base method
+func (m *MockHandler) ArticleGet(slug string) (*domain.Article, error) {
+	ret := m.ctrl.Call(m, "ArticleGet", slug)
+	ret0, _ := ret[0].(*domain.Article)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ArticleGet indicates an expected call of ArticleGet
+func (mr *MockHandlerMockRecorder) ArticleGet(slug interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArticleGet", reflect.TypeOf((*MockHandler)(nil).ArticleGet), slug)
+}
+
+// ArticleDelete mocks base method
+func (m *MockHandler) ArticleDelete(slug string) error {
+	ret := m.ctrl.Call(m, "ArticleDelete", slug)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ArticleDelete indicates an expected call of ArticleDelete
+func (mr *MockHandlerMockRecorder) ArticleDelete(slug interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArticleDelete", reflect.TypeOf((*MockHandler)(nil).ArticleDelete), slug)
+}
+
 // MockLogger is a mock of Logger interface
 type MockLogger struct {
 	ctrl     *gomock.Controller

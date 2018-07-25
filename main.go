@@ -6,6 +6,7 @@ import (
 	"github.com/err0r500/go-realworld-clean/implem/gin.server"
 	"github.com/err0r500/go-realworld-clean/implem/jwt.authHandler"
 	"github.com/err0r500/go-realworld-clean/implem/logrus.logger"
+	"github.com/err0r500/go-realworld-clean/implem/memory.articleRW"
 	"github.com/err0r500/go-realworld-clean/implem/memory.userRW"
 	"github.com/err0r500/go-realworld-clean/implem/user.validator"
 	"github.com/err0r500/go-realworld-clean/infra"
@@ -64,13 +65,13 @@ func run() {
 	)
 
 	server.NewWithLogger(
-		uc.NewHandler(
-			routerLogger,
-			userRW.New(),
-			nil,
-			validator.New(),
-			authHandler,
-		),
+		uc.HandlerConstructor{
+			Logger:        routerLogger,
+			UserRW:        userRW.New(),
+			ArticleRW:     articleRW.New(),
+			UserValidator: validator.New(),
+			AuthHandler:   authHandler,
+		}.New(),
 		authHandler,
 		routerLogger,
 	).SetRoutes(ginServer.Router)

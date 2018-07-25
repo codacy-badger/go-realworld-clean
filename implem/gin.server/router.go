@@ -75,10 +75,7 @@ func (rH RouterHandler) SetRoutes(r *gin.Engine) {
 }
 
 // TODO : implement these routes
-func (RouterHandler) articlePost(c *gin.Context)           {}
-func (RouterHandler) articleGet(c *gin.Context)            {}
-func (RouterHandler) articlePut(c *gin.Context)            {}
-func (RouterHandler) articleDelete(c *gin.Context)         {}
+
 func (RouterHandler) articleFavoritePost(c *gin.Context)   {}
 func (RouterHandler) articleFavoriteDelete(c *gin.Context) {}
 func (RouterHandler) articleCommentsGet(c *gin.Context)    {}

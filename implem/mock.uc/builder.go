@@ -35,5 +35,11 @@ func NewMockedInteractor(mockCtrl *gomock.Controller) MockedInteractor {
 
 //GetUCHandler : returns a uc.interactor in order to call its methods aka the use cases to test
 func (i MockedInteractor) GetUCHandler() uc.Handler {
-	return uc.NewHandler(i.Logger, i.UserRW, i.ArticleRW, i.UserValidator, i.AuthHandler)
+	return uc.HandlerConstructor{
+		Logger:        i.Logger,
+		UserRW:        i.UserRW,
+		ArticleRW:     i.ArticleRW,
+		UserValidator: i.UserValidator,
+		AuthHandler:   i.AuthHandler,
+	}.New()
 }

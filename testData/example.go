@@ -1,6 +1,10 @@
 package testData
 
-import "github.com/err0r500/go-realworld-clean/domain"
+import (
+	"time"
+
+	"github.com/err0r500/go-realworld-clean/domain"
+)
 
 var rickBio = "Rick biography string"
 var janeImg = "jane img link"
@@ -11,6 +15,12 @@ func User(name string) domain.User {
 		return rick
 	default:
 		return jane
+	}
+}
+func Article(name string) domain.Article {
+	switch name {
+	default:
+		return janeArticle
 	}
 }
 
@@ -42,4 +52,25 @@ func Profile(name string) domain.Profile {
 var janeFollowingRick = domain.Profile{
 	User:      rick,
 	Following: true,
+}
+
+var janeArticle = domain.Article{
+	Slug:           "articleSlug",
+	Title:          "articleTitle",
+	Description:    "description",
+	Body:           "body",
+	TagList:        []string{"tagList"},
+	CreatedAt:      time.Now(),
+	UpdatedAt:      time.Now(),
+	Favorited:      true,
+	FavoritesCount: 123,
+	Author:         jane,
+	Comments: []domain.Comment{
+		{ID: 1,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+			Body:      "commentBody",
+			Author:    rick,
+		},
+	},
 }

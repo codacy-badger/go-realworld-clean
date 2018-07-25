@@ -1,6 +1,8 @@
 package uc
 
 import (
+	"log"
+
 	"github.com/err0r500/go-realworld-clean/domain"
 )
 
@@ -15,18 +17,57 @@ type Handler interface {
 
 	ArticlesFeed(username string, limit, offset int) (articles domain.ArticleCollection, totalArticleCount int, err error)
 	GetArticles(limit, offset int, filters Filters) (articles domain.ArticleCollection, totalArticleCount int, err error)
+
+	ArticlePost(article domain.Article) (*domain.Article, error)
+	ArticlePut(slug string, article domain.Article) (*domain.Article, error)
+	ArticleGet(slug string) (*domain.Article, error)
+	ArticleDelete(slug string) error
+}
+
+type HandlerConstructor struct {
+	Logger        Logger
+	UserRW        UserRW
+	ArticleRW     ArticleRW
+	UserValidator UserValidator
+	AuthHandler   AuthHandler
+}
+
+func (c HandlerConstructor) New() Handler {
+	if c.Logger == nil {
+		log.Fatal("missing Logger")
+	}
+	if c.UserRW == nil {
+		log.Fatal("missing UserRW")
+	}
+	if c.ArticleRW == nil {
+		log.Fatal("missing ArticleRW")
+	}
+	if c.UserValidator == nil {
+		log.Fatal("missing UserValidator")
+	}
+	if c.AuthHandler == nil {
+		log.Fatal("missing AuthHandler")
+	}
+
+	return interactor{
+		logger:        c.Logger,
+		userRW:        c.UserRW,
+		articleRW:     c.ArticleRW,
+		userValidator: c.UserValidator,
+		authHandler:   c.AuthHandler,
+	}
 }
 
 // NewHandler : the interactor constructor, use this in order to avoid null pointers at runtime
-func NewHandler(logger Logger, uRW UserRW, arw ArticleRW, validator UserValidator, handler AuthHandler) Handler {
-	return interactor{
-		logger:        logger,
-		userRW:        uRW,
-		articleRW:     arw,
-		userValidator: validator,
-		authHandler:   handler,
-	}
-}
+//func NewHandler(Logger Logger, uRW UserRW, arw ArticleRW, validator UserValidator, handler AuthHandler) Handler {
+//	return interactor{
+//		Logger:        Logger,
+//		UserRW:        uRW,
+//		ArticleRW:     arw,
+//		UserValidator: validator,
+//		AuthHandler:   handler,
+//	}
+//}
 
 // interactor : the struct that will have as properties all the IMPLEMENTED interfaces
 // in order to provide them to its methods : the use cases
